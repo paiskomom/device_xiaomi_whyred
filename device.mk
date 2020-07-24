@@ -6,6 +6,9 @@
 
 PRODUCT_SOONG_NAMESPACES += $(LOCAL_PATH)
 
+QCOM_SOONG_NAMESPACE := \
+    $(LOCAL_PATH)/qcom-caf
+
 # Setup dalvik vm configs
 $(call inherit-product, frameworks/native/build/phone-xhdpi-6144-dalvik-heap.mk)
 
