@@ -1,5 +1,3 @@
-ifeq ($(call my-dir),$(call project-path-for,qcom-display))
-
 ifneq ($(TARGET_DISABLE_DISPLAY),true)
 sdm-libs := sdm/libs
 display-hals := include $(sdm-libs)/utils $(sdm-libs)/core libdebug
@@ -26,6 +24,4 @@ else
 ifneq ($(filter msm% apq%,$(TARGET_BOARD_PLATFORM)),)
     include $(call all-named-subdir-makefiles,$(display-hals))
 endif
-endif
-
 endif
