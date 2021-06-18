@@ -222,6 +222,10 @@ PRODUCT_PACKAGES += \
     android.frameworks.displayservice@1.0 \
     vendor.display.config@1.1
 
+# Disable rescue party sometimes is fucked and the rom wants clean shit
+PRODUCT_SYSTEM_PROPERTIES += \
+    persist.device_config.configuration.disable_rescue_party=true
+
 # Doze
 PRODUCT_PACKAGES += \
     ParanoidDoze
