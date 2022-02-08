@@ -4,10 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-# Inherit from those products. Most specific first.
-$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
-$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
-
+PRODUCT_SOONG_NAMESPACES += $(LOCAL_PATH)
 
 # Setup dalvik vm configs
 $(call inherit-product, frameworks/native/build/phone-xhdpi-6144-dalvik-heap.mk)
@@ -18,6 +15,7 @@ $(call inherit-product-if-exists, vendor/xiaomi/surya/surya-vendor.mk)
 # Enable updating of APEXes
 $(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
 
+# Device Properties
 -include $(LOCAL_PATH)/system_prop.mk
 -include $(LOCAL_PATH)/product_prop.mk
 
@@ -48,6 +46,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     BluetoothQti \
     libbtconfigstore
+
+# Boot animation sizes
+TARGET_SCREEN_HEIGHT := 2400
+TARGET_SCREEN_WIDTH := 1080
 
 # Camera
 PRODUCT_PACKAGES += \
@@ -104,14 +106,14 @@ PRODUCT_PACKAGES += \
 DEVICE_PACKAGE_OVERLAYS += \
     $(LOCAL_PATH)/overlay
 
-# Permissions
-PRODUCT_COPY_FILES += \
-	frameworks/native/data/etc/handheld_core_hardware.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/handheld_core_hardware.xml
-
 # Overlays - override vendor ones
 PRODUCT_PACKAGES += \
     FrameworksResCommon \
-    FrameworksResTarget 
+    FrameworksResTarget
+
+# Permissions
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/handheld_core_hardware.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/handheld_core_hardware.xml
 
 # Power
 PRODUCT_PACKAGES += \
@@ -138,6 +140,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_BOOT_JARS += \
     telephony-ext
 
+# Thetering offload
+PRODUCT_PACKAGES += \
+    android.hardware.tetheroffload.config@1.0
+
 # Vendor overlay
 PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,*,$(LOCAL_PATH)/vendor-overlay/,$(TARGET_COPY_OUT_PRODUCT)/vendor_overlay/$(PRODUCT_TARGET_VNDK_VERSION)) \
@@ -151,10 +157,3 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_BOOT_JARS += \
     WfdCommon
-
-# Thetering offload
-PRODUCT_PACKAGES += \
-    android.hardware.tetheroffload.config@1.0
-
-PRODUCT_SOONG_NAMESPACES += $(LOCAL_PATH)
-
