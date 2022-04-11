@@ -198,6 +198,7 @@
     <bool name="config_lidControlsSleep">true</bool>
     <bool name="config_dozeAlwaysOnEnabled">false</bool>
     <bool name="config_dozeAlwaysOnDisplayAvailable">false</bool>
+    <bool name="config_displayBlanksAfterDoze">false</bool>
     <string name="config_dozeComponent">com.android.systemui/com.android.systemui.doze.DozeService</string>
 
     <!-- Hardware Display and LED -->
