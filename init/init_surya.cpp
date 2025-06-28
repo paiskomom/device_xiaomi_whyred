@@ -136,15 +136,16 @@ void set_device_props(const std::string fingerprint, const std::string descripti
 void vendor_load_properties() {
     std::string hwname = GetProperty("ro.boot.hwname", "");
 
-    std::string fingerprint = "google/walleye/walleye:8.1.0/OPM1.171019.011/4448085:user/release-keys";
-    std::string description = "walleye-user 8.1.0 OPM1.171019.011 4448085 release-keys";
-
     if (hwname == "surya") {
+        std::string fingerprint = "POCO/surya_global/surya:10/QKQ1.200512.002/V12.0.9.0.QJGMIXM:user/release-keys";
+        std::string description = "surya_global-user 10 QKQ1.200512.002 V12.0.9.0.QJGMIXM release-keys";
         set_device_props(fingerprint, description, "POCO", "surya", "POCO X3 NFC");
         property_override("ro.product.mod_device", "surya_global");
     } else if (hwname == "karna") {
+        std::string fingerprint = "POCO/karna_global/karna:10/QKQ1.200512.002/V12.0.9.0.QJGMIXM:user/release-keys";
+        std::string description = "karna_global-user 10 QKQ1.200512.002 V12.0.9.0.QJGMIXM release-keys";
         set_device_props(fingerprint, description, "POCO", "karna", "POCO X3");
-        property_override("ro.product.mod_device", "surya_in_global");
+        property_override("ro.product.mod_device", "karna_global");
     }
 
     check_device();
