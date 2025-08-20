@@ -28,14 +28,14 @@
    IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <cstdlib>
-#include <fstream>
+#include <android-base/properties.h>
 #include <string.h>
 #include <sys/sysinfo.h>
 #include <unistd.h>
-#include <vector>
 
-#include <android-base/properties.h>
+#include <cstdlib>
+#include <fstream>
+#include <vector>
 #define _REALLY_INCLUDE_SYS__SYSTEM_PROPERTIES_H_
 #include <sys/_system_properties.h>
 
@@ -62,101 +62,100 @@ std::vector<std::string> ro_props_default_source_order = {
     "vendor.",
 };
 
-void check_device()
-{
-    struct sysinfo sys;
+void check_device() {
+  struct sysinfo sys;
 
-    sysinfo(&sys);
+  sysinfo(&sys);
 
-    if (sys.totalram >= 5ull * 1024 * 1024 * 1024){
-        // from - phone-xhdpi-6144-dalvik-heap.mk
-        heapstartsize = "16m";
-        heapgrowthlimit = "256m";
-        heapsize = "512m";
-        heaptargetutilization = "0.5";
-        heapminfree = "8m";
-        heapmaxfree = "32m";
-    } else if (sys.totalram >= 7ull * 1024 * 1024 * 1024) {
-        // from - phone-xhdpi-8192-dalvik-heap.mk
-        heapstartsize = "24m";
-        heapgrowthlimit = "256m";
-        heapsize = "512m";
-        heaptargetutilization = "0.46";
-        heapminfree = "8m";
-        heapmaxfree = "48m";
-    }
+  if (sys.totalram >= 5ull * 1024 * 1024 * 1024) {
+    // from - phone-xhdpi-6144-dalvik-heap.mk
+    heapstartsize = "16m";
+    heapgrowthlimit = "256m";
+    heapsize = "512m";
+    heaptargetutilization = "0.5";
+    heapminfree = "8m";
+    heapmaxfree = "32m";
+  } else if (sys.totalram >= 7ull * 1024 * 1024 * 1024) {
+    // from - phone-xhdpi-8192-dalvik-heap.mk
+    heapstartsize = "24m";
+    heapgrowthlimit = "256m";
+    heapsize = "512m";
+    heaptargetutilization = "0.46";
+    heapminfree = "8m";
+    heapmaxfree = "48m";
+  }
 }
 
 void property_override(char const prop[], char const value[], bool add = true) {
-    prop_info *pi;
+  prop_info *pi;
 
-    pi = (prop_info *)__system_property_find(prop);
-    if (pi)
-        __system_property_update(pi, value, strlen(value));
-    else if (add)
-        __system_property_add(prop, strlen(prop), value, strlen(value));
+  pi = (prop_info *)__system_property_find(prop);
+  if (pi)
+    __system_property_update(pi, value, strlen(value));
+  else if (add)
+    __system_property_add(prop, strlen(prop), value, strlen(value));
 }
 
 void set_device_props(const std::string fingerprint, const std::string description,
-        const std::string brand, const std::string device, const std::string model) {
-        const auto set_ro_build_prop = [](const std::string &source,
+                      const std::string brand, const std::string device, const std::string model) {
+  const auto set_ro_build_prop = [](const std::string &source,
+                                    const std::string &prop,
+                                    const std::string &value) {
+    auto prop_name = "ro." + source + "build." + prop;
+    property_override(prop_name.c_str(), value.c_str(), false);
+  };
+
+  const auto set_ro_product_prop = [](const std::string &source,
                                       const std::string &prop,
                                       const std::string &value) {
-        auto prop_name = "ro." + source + "build." + prop;
-        property_override(prop_name.c_str(), value.c_str(), false);
-    };
+    auto prop_name = "ro.product." + source + prop;
+    property_override(prop_name.c_str(), value.c_str(), false);
+  };
 
-        const auto set_ro_product_prop = [](const std::string &source,
-                                        const std::string &prop,
-                                        const std::string &value) {
-        auto prop_name = "ro.product." + source + prop;
-        property_override(prop_name.c_str(), value.c_str(), false);
-    };
+  for (const auto &source : ro_props_default_source_order) {
+    set_ro_build_prop(source, "fingerprint", fingerprint);
+    set_ro_product_prop(source, "brand", brand);
+    set_ro_product_prop(source, "device", device);
+    set_ro_product_prop(source, "model", model);
+  }
 
-    for (const auto &source : ro_props_default_source_order) {
-        set_ro_build_prop(source, "fingerprint", fingerprint);
-        set_ro_product_prop(source, "brand", brand);
-        set_ro_product_prop(source, "device", device);
-        set_ro_product_prop(source, "model", model);
-    }
+  property_override("ro.build.fingerprint", fingerprint.c_str());
+  property_override("ro.build.description", description.c_str());
+  property_override("ro.bootimage.build.fingerprint", fingerprint.c_str());
+  property_override("ro.system_ext.build.fingerprint", fingerprint.c_str());
+  property_override("ro.com.google.clientidbase", "android-xiaomi");
+  property_override("ro.com.google.clientidbase.ax", "android-xiaomi-rvo3");
+  property_override("ro.com.google.clientidbase.ms", "android-xiaomi-rvo3");
+  property_override("ro.com.google.clientidbase.tx", "android-xiaomi-rvo3");
+  property_override("ro.com.google.clientidbase.vs", "android-xiaomi-rvo3");
 
-    property_override("ro.build.fingerprint", fingerprint.c_str());
-    property_override("ro.build.description", description.c_str());
-    property_override("ro.bootimage.build.fingerprint", fingerprint.c_str());
-    property_override("ro.system_ext.build.fingerprint", fingerprint.c_str());
-    property_override("ro.com.google.clientidbase", "android-xiaomi");
-    property_override("ro.com.google.clientidbase.ax", "android-xiaomi-rvo3");
-    property_override("ro.com.google.clientidbase.ms", "android-xiaomi-rvo3");
-    property_override("ro.com.google.clientidbase.tx", "android-xiaomi-rvo3");
-    property_override("ro.com.google.clientidbase.vs", "android-xiaomi-rvo3");
-
-    property_override("ro.control_privapp_permissions", "log");
+  property_override("ro.control_privapp_permissions", "log");
 }
 
 void vendor_load_properties() {
-    std::string hwname = GetProperty("ro.boot.hwname", "");
+  std::string hwname = GetProperty("ro.boot.hwname", "");
 
-    if (hwname == "surya") {
-        std::string fingerprint = "POCO/surya_global/surya:10/QKQ1.200512.002/V12.0.9.0.QJGMIXM:user/release-keys";
-        std::string description = "surya_global-user 10 QKQ1.200512.002 V12.0.9.0.QJGMIXM release-keys";
-        set_device_props(fingerprint, description, "POCO", "surya", "POCO X3 NFC");
-        property_override("ro.product.mod_device", "surya_global");
-    } else if (hwname == "karna") {
-        std::string fingerprint = "POCO/karna_global/karna:10/QKQ1.200512.002/V12.0.9.0.QJGMIXM:user/release-keys";
-        std::string description = "karna_global-user 10 QKQ1.200512.002 V12.0.9.0.QJGMIXM release-keys";
-        set_device_props(fingerprint, description, "POCO", "karna", "POCO X3");
-        property_override("ro.product.mod_device", "karna_global");
-    }
+  if (hwname == "surya") {
+    std::string fingerprint = "POCO/surya_global/surya:10/QKQ1.200512.002/V12.0.9.0.QJGMIXM:user/release-keys";
+    std::string description = "surya_global-user 10 QKQ1.200512.002 V12.0.9.0.QJGMIXM release-keys";
+    set_device_props(fingerprint, description, "POCO", "surya", "POCO X3 NFC");
+    property_override("ro.product.mod_device", "surya_global");
+  } else if (hwname == "karna") {
+    std::string fingerprint = "POCO/karna_global/karna:10/QKQ1.200512.002/V12.0.9.0.QJGMIXM:user/release-keys";
+    std::string description = "karna_global-user 10 QKQ1.200512.002 V12.0.9.0.QJGMIXM release-keys";
+    set_device_props(fingerprint, description, "POCO", "karna", "POCO X3");
+    property_override("ro.product.mod_device", "karna_global");
+  }
 
-    check_device();
-    SetProperty("dalvik.vm.heapstartsize", heapstartsize);
-    SetProperty("dalvik.vm.heapgrowthlimit", heapgrowthlimit);
-    SetProperty("dalvik.vm.heapsize", heapsize);
-    SetProperty("dalvik.vm.heaptargetutilization", heaptargetutilization);
-    SetProperty("dalvik.vm.heapminfree", heapminfree);
-    SetProperty("dalvik.vm.heapmaxfree", heapmaxfree);
+  check_device();
+  SetProperty("dalvik.vm.heapstartsize", heapstartsize);
+  SetProperty("dalvik.vm.heapgrowthlimit", heapgrowthlimit);
+  SetProperty("dalvik.vm.heapsize", heapsize);
+  SetProperty("dalvik.vm.heaptargetutilization", heaptargetutilization);
+  SetProperty("dalvik.vm.heapminfree", heapminfree);
+  SetProperty("dalvik.vm.heapmaxfree", heapmaxfree);
 
-    //Safetynet workarounds
-    property_override("ro.oem_unlock_supported", "0");
-    property_override("ro.boot.verifiedbootstate", "green");
+  // Safetynet workarounds
+  property_override("ro.oem_unlock_supported", "0");
+  property_override("ro.boot.verifiedbootstate", "green");
 }

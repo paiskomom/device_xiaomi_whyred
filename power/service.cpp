@@ -30,13 +30,14 @@
 #define LOG_TAG "android.hardware.power@1.2-service"
 
 #include <android/log.h>
-#include <hidl/HidlTransportSupport.h>
 #include <hardware/power.h>
+#include <hidl/HidlTransportSupport.h>
+
 #include "Power.h"
 
+using android::OK;
 using android::sp;
 using android::status_t;
-using android::OK;
 
 // libhwbinder:
 using android::hardware::configureRpcThreadpool;
@@ -47,35 +48,33 @@ using android::hardware::power::V1_2::IPower;
 using android::hardware::power::V1_2::implementation::Power;
 
 int main() {
+  status_t status;
+  android::sp<IPower> service = nullptr;
 
-    status_t status;
-    android::sp<IPower> service = nullptr;
+  ALOGI("Power HAL Service 1.2 is starting.");
 
-    ALOGI("Power HAL Service 1.2 is starting.");
+  service = new Power();
+  if (service == nullptr) {
+    ALOGE("Can not create an instance of Power HAL interface.");
 
-    service = new Power();
-    if (service == nullptr) {
-        ALOGE("Can not create an instance of Power HAL interface.");
+    goto shutdown;
+  }
 
-        goto shutdown;
-    }
+  configureRpcThreadpool(1, true /*callerWillJoin*/);
 
-    configureRpcThreadpool(1, true /*callerWillJoin*/);
+  status = service->registerAsService();
+  if (status != OK) {
+    ALOGE("Could not register service for Power HAL(%d).", status);
+    goto shutdown;
+  }
 
-    status = service->registerAsService();
-    if (status != OK) {
-        ALOGE("Could not register service for Power HAL(%d).", status);
-        goto shutdown;
-    }
-
-    ALOGI("Power Service is ready");
-    joinRpcThreadpool();
-    //Should not pass this line
+  ALOGI("Power Service is ready");
+  joinRpcThreadpool();
+  // Should not pass this line
 
 shutdown:
-    // In normal operation, we don't expect the thread pool to exit
+  // In normal operation, we don't expect the thread pool to exit
 
-    ALOGE("Power Service is shutting down");
-    return 1;
+  ALOGE("Power Service is shutting down");
+  return 1;
 }
-
