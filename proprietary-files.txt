@@ -179,9 +179,9 @@ product/lib64/vendor.display.postproc@1.0.so
 # Power-off charging daemon - from Davinci RKQ1.200826.002-20.12.28
 bin/charger|39a57d6b10dcef08005230c67c7359de11219cc9
 
-# Soundfx - from guacamole QKQ1.190716.003
-product/vendor_overlay/29/lib/soundfx/libvolumelistener.so|e6c1f1bfb7bd5cfb36131aaff0d4e8c74833865d
-product/vendor_overlay/29/lib64/soundfx/libvolumelistener.so|1b16cd00fd2144e860f99c0869c2db1489c789a2
+# Soundfx - from OnePlus7Pro-user 10 QKQ1.190716.003 2101212056 release-keys
+product/vendor_overlay/29/lib/soundfx/libvolumelistener.so|eccf8e24f178f3679f9309be0d92234b4cb58489
+product/vendor_overlay/29/lib64/soundfx/libvolumelistener.so|abb573d099b777d4f4e85960778999b3a92a393e
 
 # System
 lib/libaudio-resampler.so
