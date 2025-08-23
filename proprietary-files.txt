@@ -176,8 +176,8 @@ product/lib64/vendor.display.color@1.2.so
 product/lib64/vendor.display.color@1.3.so
 product/lib64/vendor.display.postproc@1.0.so
 
-# Power-off charging daemon - from Davinci RKQ1.200826.002-20.12.28
-bin/charger|39a57d6b10dcef08005230c67c7359de11219cc9
+# Power-off charging daemon - from davinci-user 11 RKQ1.200826.002 21.11.24 release-keys
+bin/charger|39ca2230f8f33bedda9df15057d90a3e4aced954
 
 # Soundfx - from OnePlus7Pro-user 10 QKQ1.190716.003 2101212056 release-keys
 product/vendor_overlay/29/lib/soundfx/libvolumelistener.so|eccf8e24f178f3679f9309be0d92234b4cb58489
