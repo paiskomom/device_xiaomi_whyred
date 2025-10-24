@@ -474,6 +474,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(DEVICE_PATH)/configs/excluded-input-devices.xml:vendor/etc/excluded-input-devices.xml
 
+# ViPER4AndroidFX
+$(call inherit-product, packages/apps/ViPER4AndroidFX/config.mk)
+
 # Wifi
 PRODUCT_PACKAGES += \
     android.hardware.wifi@1.0-service \
