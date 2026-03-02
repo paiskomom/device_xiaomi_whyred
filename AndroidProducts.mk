@@ -9,14 +9,14 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# WITHOUT WAqassaANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/rr_whyred.mk
+    $(LOCAL_DIR)/qassa_whyred.mk
 
 COMMON_LUNCH_CHOICES := \
-    rr_whyred-user \
-    rr_whyred-userdebug \
-    rr_whyred-eng
+    qassa_whyred-user \
+    qassa_whyred-userdebug \
+    qassa_whyred-eng
