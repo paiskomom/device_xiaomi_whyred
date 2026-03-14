@@ -14,9 +14,9 @@
 # limitations under the License.
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/pa_whyred.mk
+    $(LOCAL_DIR)/conquer_whyred.mk
 
 COMMON_LUNCH_CHOICES := \
-    pa_whyred-user \
-    pa_whyred-userdebug \
-    pa_whyred-eng
+    conquer_whyred-user \
+    conquer_whyred-userdebug \
+    conquer_whyred-eng
