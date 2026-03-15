@@ -12,12 +12,11 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 $(call inherit-product, $(LOCAL_PATH)/device.mk)
 
 # Inherit some common keepQASSA stuff.
-$(call inherit-product, vendor/qassa/config/common_full_phone.mk)
+$(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 TARGET_FACE_UNLOCK_SUPPORTED := true
-USE_PIXEL_CHARGING := true
 
 # Device identifier. This must come after all inclusions.
-PRODUCT_NAME := qassa_surya
+PRODUCT_NAME := lineage_surya
 PRODUCT_DEVICE := surya
 PRODUCT_BRAND := POCO
 PRODUCT_MODEL := POCO X3/NFC
